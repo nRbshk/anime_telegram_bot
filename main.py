@@ -1,5 +1,4 @@
 import telebot
-import sys
 
 bot = telebot.TeleBot("")
 @bot.message_handler(content_types=['text'])
@@ -21,6 +20,6 @@ if __name__ == '__main__':
     print('Running bot.')
     token = get_token()
     bot.token = token
-    bot.polling(none_stop=True, interval=0)
+    bot.polling(none_stop=False, interval=0)
 
 
