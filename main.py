@@ -1,15 +1,26 @@
 import telebot
+import sys
 
-
-
-
+bot = telebot.TeleBot("")
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    # if message.rom_user.id == 900530539:
+    bot.send_message(message.from_user.id, "message received.")
     if message.text == "Hello":
         bot.send_message(message.from_user.id, "POKA")
 
 
 
-bot.polling(none_stop=True, interval=0)
+
+def get_token(fn: str = "token.token"):
+    f = open(fn, 'r')
+    token = f.readline()
+    f.close()
+    return token
+
+if __name__ == '__main__':
+    print('Running bot.')
+    token = get_token()
+    bot.token = token
+    bot.polling(none_stop=True, interval=0)
+
 
