@@ -37,7 +37,7 @@ class BD:
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
-        cursor.execute("UPDATE anime SET time=? WHERE id_telegram=? AND name=?", (time_, idt_, name_,))
+        cursor.execute("UPDATE anime SET time=? WHERE id_telegram=? AND name=? AND status=?", (time_, idt_, name_, "inProgress"))
         conn.commit()
 
         conn.close()
