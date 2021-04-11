@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 async def set_time_start(message: types.Message):
     response = bd.show(message.from_user.id, 'inProgress')
 
-    kb = types.ReplyKeyboardMarkup()
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for r in response:
         kb.add(r[2])
 
@@ -56,6 +56,8 @@ async def chosen_time(message: types.Message, state: FSMContext):
     await update_in_bd(state)
 
     await message.answer(f"Time {time} for anime {name} was setted.")
+
+    await state.finish()
     
 async def update_in_bd(state: FSMContext):
     user_data = await state.get_data()
