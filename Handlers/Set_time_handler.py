@@ -65,7 +65,7 @@ async def update_in_bd(state: FSMContext):
     idt = user_data['idt']
     name = user_data['name']
     time = user_data['time']
-
+    time = time[0:2] + ":" + time[3:5]
     bd.set_time(idt, name, time)
 
 def register_handlers_set_time(dp: Dispatcher):
