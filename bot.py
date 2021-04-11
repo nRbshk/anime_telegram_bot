@@ -10,6 +10,7 @@ from Handlers.Add_handler import register_handlers_add
 from Handlers.Common_handler import register_handlers_common
 from Handlers.Show_handler import register_handlers_show
 from Handlers.Set_time_handler import register_handlers_set_time
+from Handlers.Set_status_handler import register_handlers_set_status
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,8 @@ async def set_commands(bot: Bot):
         BotCommand(command='/help', description="Show help"),
         BotCommand(command='/start', description="Show help"),
         BotCommand(command='/cancel', description='Cancel last command'),
-        BotCommand(command='/set_time', description='Set time for last episode')
+        BotCommand(command='/set_time', description='Set time for last episode'),
+        BotCommand(command="/set_status", description="Set status for anime")
     ]
 
     await bot.set_my_commands(commands)
@@ -41,6 +43,7 @@ async def start():
     register_handlers_add(dp)
     register_handlers_show(dp)
     register_handlers_set_time(dp)
+    register_handlers_set_status(dp)
 
 
     await set_commands(bot)
