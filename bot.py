@@ -1,38 +1,42 @@
-from telebot import TeleBot
-from services.Action_factory import Action_factory
-from services.BD import BD
-from services.helpers import *
+import logging
+
+from aiogram import Bot, Dispatcher
+from aiogram.types import BotCommand
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+
+from helpers import *
+
+from Handlers.Add_handler import register_handlers_add
+from Handlers.Common_handler import register_handlers_common
+from Handlers.Show_handler import register_handlers_show
 
 
-bot = TeleBot("")
-factory = Action_factory(bot, BD())
+logger = logging.getLogger(__name__)
 
-# Переделать ЭКШОНЫ
-# me: /start
-# bot: Enter command
-# me: /add
-# bot: Enter name
-# me: Naruto
-# bot: Enter status
-# me: done, isWatching, end
+async def set_commands(bot: Bot):
+    commands = [
+        BotCommand(command='/add', description="Add anime to list")
+    ]
 
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
-    bot.send_message(message.from_user.id, "message received.")
-    idt = message.from_user.id
-    cmd, params = get_cmd_params(message.text, idt)
-    print(params)
-    action = factory.create_action(cmd)
-
-    if action is None:
-        bot.send_message(message.from_user.id, "Command not found.")
-    else:
-        action.handler(*params)
-        del action
+    await bot.set_my_commands(commands)
 
 
-def start():
-    print('Running bot.')
+async def start():
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    )
+    logger.error("Starting bot")
 
-    bot.token = get_token()
-    bot.polling(none_stop=False, interval=0)
+
+    bot = Bot(token=get_token())
+    dp = Dispatcher(bot, storage=MemoryStorage())
+
+
+    register_handlers_common(dp)
+    register_handlers_add(dp)
+    register_handlers_show(dp)
+
+
+    await set_commands(bot)
+    await dp.start_polling()
