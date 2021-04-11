@@ -4,3 +4,4 @@ __init__
 __pycache__
 token.token
 db.db
+log.log

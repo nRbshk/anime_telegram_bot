@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from helpers import *
+from helpers import get_token
 
 from Handlers.Add_handler import register_handlers_add
 from Handlers.Common_handler import register_handlers_common
@@ -34,10 +34,13 @@ async def set_commands(bot: Bot):
 
 async def start():
     logging.basicConfig(
+        filename='log.log',
+        filemode='w',
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        datefmt='%d-%m-%y %H:%M:%S'
     )
-    logger.error("Starting bot")
+    logger.info("Starting bot")
 
 
     bot = Bot(token=get_token())
