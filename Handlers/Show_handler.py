@@ -35,12 +35,17 @@ async def chosen_status(message: types.Message, state: FSMContext):
     await state.update_data(status=message.text)
     response = await select_from_bd(bd, state)
 
-    text = []
-    for r in response:
-        tmp = f"{r[2]}\nEpisode: {r[4]}\nTime: {r[5]}\n\n"
-        text.append(tmp)
 
-    await message.answer("".join(text), reply_markup=types.ReplyKeyboardRemove())
+    if response == []:
+        await message.answer("List is empty.", reply_markup=types.ReplyKeyboardRemove())
+    else:
+        text = []
+        for r in response:
+            tmp = f"{r[2]}\nEpisode: {r[4]}\nTime: {r[5]}\n\n"
+            text.append(tmp)
+
+        await message.answer("".join(text), reply_markup=types.ReplyKeyboardRemove())
+
     await state.finish()
     
 async def select_from_bd(bd: BD, state: FSMContext):
