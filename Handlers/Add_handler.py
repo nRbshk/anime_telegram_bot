@@ -58,7 +58,7 @@ async def anime_status_chosen(message: types.Message, state: FSMContext):
         await insert_in_bd(bd, state)
         
         user_data = await state.get_data()
-        await message.answer(f"Anime {user_data['chosen_name']} with status {user_data['status']} added.", reply_markup=types.ReplyKeyboardRemove())
+        await message.answer(f"Anime `{user_data['chosen_name']}` with status `{user_data['status']}` added.", reply_markup=types.ReplyKeyboardRemove())
         
         await state.finish()
 
@@ -70,7 +70,7 @@ async def anime_episode_chosen(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
     await insert_in_bd(bd, state)
     
-    await message.answer(f"Anime {user_data['chosen_name']}, with {user_data['status']} added.", reply_markup=types.ReplyKeyboardRemove())
+    await message.answer(f"Anime `{user_data['chosen_name']}` with `{user_data['status']}` added.", reply_markup=types.ReplyKeyboardRemove())
 
     
     await state.finish()
