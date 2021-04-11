@@ -52,5 +52,15 @@ class BD:
 
         conn.close()
 
+    def set_episode(self, idt_, name_, episode_):
+        conn = sqlite3.connect("db.db")
+        cursor = conn.cursor()
+
+        cursor.execute("UPDATE anime SET episode=? WHERE id_telegram=? AND name=?", (episode_, idt_, name_))
+
+        conn.commit()
+
+        conn.close()
+
 
 bd = BD()
