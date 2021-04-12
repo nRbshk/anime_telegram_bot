@@ -1,12 +1,17 @@
 from os import name
 import sqlite3
 from helpers import get_date
+
+import logging
+
+logger = logging.getLogger(__name__)
 # # ANIME table
 # id id_telegram name status episode time add_time upd_time notified
 # int int text text text text text text text
 available_status = ["done", "inProgress", "inList", "All"]
 class BD:
     def save_anime(self, idt_, name_, status_, episode_ = 0):
+        logger.info("INSERT INTO BD")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
@@ -20,6 +25,7 @@ class BD:
         return 0
 
     def show(self, idt_, status_ = "inProgress"):
+        logger.info("SHOW FROM BD")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
@@ -37,6 +43,7 @@ class BD:
         return list_to_print
 
     def set_time(self, idt_, name_, time_):
+        logger.info("SET TIME")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
@@ -50,6 +57,7 @@ class BD:
         conn.close()
 
     def set_status(self, idt_, name_, status_):
+        logger.info("SET STATUS")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
@@ -64,6 +72,7 @@ class BD:
         conn.close()
 
     def set_episode(self, idt_, name_, episode_):
+        logger.info("SET EPISODE")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
@@ -81,6 +90,7 @@ class BD:
 
 
     def select_notify(self, notify: str = "False"):
+        logger.info("SELECT NOTIFY")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
@@ -102,6 +112,7 @@ class BD:
         return names, idt
         
     def update_notify(self, idt_, name_, notify: str = "True"):
+        logger.info("UPDATE NOTIFY")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
