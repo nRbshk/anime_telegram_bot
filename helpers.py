@@ -1,5 +1,7 @@
 import logging
 
+from os.path import exists
+from unseen_func import get_download_format, get_base_link, setup_chrome
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +28,7 @@ def check_page(names_to_check: list, idt: list) -> dict:
     :return: :class:`dict` with key name and value url, idt
     """
 
-    url = 'https://naruto-base.su/'
+    url = get_base_link()
 
     logger.info(f"Checking page {url}")
     OK_CODE = 200
@@ -47,7 +49,7 @@ def check_page(names_to_check: list, idt: list) -> dict:
 
     title_url_names = {}
 
-    add_to_link = 'https://naruto-base.su'
+    add_to_link = get_base_link()
     for index in range(len(find_title_relative)):
 
         if findall("(манга)", find_title_relative[index].text.lower()) or findall(".+ожидается", find_cont_newscont[index].text.lower()):
@@ -58,11 +60,15 @@ def check_page(names_to_check: list, idt: list) -> dict:
         for jndex in range(len(names_to_check)):
 
             if findall(f'.*{names_to_check[jndex].lower()}.*', title_name.lower()):
-                a = soup.find_all('a', href=True, text=title_name)
+                a = soup.find('a', href=True, text=title_name)
 
-                title_url_names[names_to_check[jndex]] = str(add_to_link + a[0]['href'] + ',' + str(idt[jndex]))
+                url = add_to_link + a['href']
+                
+                title_url_names[names_to_check[jndex]] = str(get_link(url) + ',' + str(idt[jndex]))
+
                 names_to_check.remove(names_to_check[jndex])
                 idt.remove(idt[jndex])
+
 
                 break
 
@@ -71,3 +77,77 @@ def check_page(names_to_check: list, idt: list) -> dict:
 
     return title_url_names
     
+def get_link(url):
+    logger.info(f"Getting link with url `{url}`")
+    from bs4 import BeautifulSoup
+
+    from selenium import webdriver
+    """
+    :param url: url for find link
+    :return: :class:`str` link
+    """
+    chrome_options, path = setup_chrome()
+
+    driver = webdriver.Chrome(executable_path="chromedriver.exe", options=chrome_options)
+
+    driver.get(url)
+    driver.find_element_by_xpath('//*[@id="ep3"]').click()
+    
+    driver.implicitly_wait(2)
+    find_player = driver.find_element_by_xpath('//*[@id="player0"]').get_attribute("innerHTML").splitlines()[0]
+    soup = BeautifulSoup(find_player, 'lxml')
+    iframe = soup.find("iframe")
+
+    return iframe['src'][2:]
+
+
+# def get_link(url):
+    # logger.info(f"Getting link with url `{url}`")
+    # from bs4 import BeautifulSoup
+
+    # from selenium import webdriver
+    # """
+    # :param url: url for find link
+    # :return: :class:`str` link
+    # """
+    # chrome_options, path = setup_chrome()
+    
+    # driver = webdriver.Chrome(executable_path="chromedriver.exe", options=chrome_options)
+
+    # driver.get(url)
+    # driver.find_element_by_xpath('//*[@id="ep3"]').click()
+    # driver.implicitly_wait(2)
+    # find_player = driver.find_element_by_xpath('//*[@id="player0"]').get_attribute("innerHTML").splitlines()[0]
+    # soup = BeautifulSoup(find_player, 'lxml')
+    # iframe = soup.find("iframe")
+
+    # return iframe['src'][2:]
+
+#     uniq_id = iframe['src'][2:].split('/')[-2]
+#     sleep(2)
+#     print(url)
+#     print(uniq_id)
+
+#     download_format = get_download_format(uniq_id)
+
+#     driver.get(download_format)
+#     sleep(2)
+#     button = driver.find_element_by_xpath('//*[@id="uc-download-link"]').click()
+#     a = driver.find_element_by_xpath('//*[@id="uc-text"]/p[2]/span').get_attribute("innerHTML").splitlines()[0]
+#     soup = BeautifulSoup(a, 'lxml')
+#     fn_download = soup.find("a").text
+
+#     driver.implicitly_wait(30)
+#     while not wait_until_download(path, fn_download):
+#         driver.implicitly_wait(30)
+    
+#     driver.close()
+#     driver.quit()
+
+
+
+# def wait_until_download(path: str, fn: str) -> bool:
+#     logger.info(f"Waiting for dowload file {fn}")
+#     fool_name = path + "\\" + fn
+    
+#     return exists(fool_name)
