@@ -1,6 +1,6 @@
 import logging
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, executor
 from aiogram.types import BotCommand
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
@@ -12,6 +12,10 @@ from Handlers.Show_handler import register_handlers_show
 from Handlers.Set_time_handler import register_handlers_set_time
 from Handlers.Set_status_handler import register_handlers_set_status
 from Handlers.Set_episode_handler import register_handlers_set_episode
+
+from Services.Notify import notify
+
+from asyncio import create_task
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +58,9 @@ async def start():
     register_handlers_set_status(dp)
     register_handlers_set_episode(dp)
 
+    create_task(notify(bot))
 
     await set_commands(bot)
+
 
     await dp.start_polling()
