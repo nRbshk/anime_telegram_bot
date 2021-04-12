@@ -11,7 +11,7 @@ from aiogram import Bot
 logger = logging.getLogger(__name__)
 
 async def notify(bot: Bot):
-    delay = 60
+    delay = 60 * 60
     while True:
         logger.info("notify")
         names_to_check, idts = bd.select_notify("False")
