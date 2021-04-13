@@ -21,7 +21,6 @@ async def notify(bot: Bot):
         for k, v in dict_name_url.items():
             url, idt, notified_ep_ = v.split(",")
 
-            print(url ,idt, notified_ep_)
             pre_text = f"Episode {notified_ep_} of anime {k} is out\n{url}"
             
             await bot.send_message(idt, pre_text)
