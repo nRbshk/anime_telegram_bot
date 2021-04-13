@@ -18,7 +18,9 @@ def get_id_sv(name: str):
     response = get(url, headers=headers, params=params).json()
 
     logger.info("END get_id_sv")
-    return response[0]['anime_id']
+    if response[0]:
+        return response[0]['anime_id']
+    return None
 
 def get_episodes_sv(anime_id: str):
     logger.info("START get_episodes_sv")
@@ -29,16 +31,25 @@ def get_episodes_sv(anime_id: str):
     response = get(url, headers=headers).json()
 
     episodes = [r for r in response if r['episode_type'] == 0]
+    
+    logger.info("END get_episodes_sv")
+    if len(episodes) > 0:
+        return episodes
+    return None
 
-    logger.info("END get_last_episode_sv")
-    return episodes[-1]
+    
 
 def get_link_sv(name, idt, notified_ep):
     logger.info("START get_link_last_ep_sv")
 
     anime_id = get_id_sv(name)
-
+    if anime_id is None:
+        return None
+        
     last_episode = get_episodes_sv(anime_id)
+    if last_episode is None:
+        return None
+    last_episode = last_episode[-1]
     if last_episode['episode_count'] > int(notified_ep):
         pre_value = last_episode['embed'] + "," + str(idt) + "," +  str(last_episode['episode_count'])
         return pre_value
