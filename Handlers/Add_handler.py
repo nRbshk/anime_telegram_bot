@@ -4,7 +4,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD import BD, bd, available_status
+from BD import BD, bd, available_status, available_dub_sub
 available_status = available_status[:-1]
 
 logger = logging.getLogger(__name__)
@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 class Add_handler(StatesGroup):
 
     name = State()
+    dub_or_sub = State()
     status = State()
     episode = State()
 
@@ -30,14 +31,33 @@ async def anime_name_chosen(message: types.Message, state: FSMContext):
     await state.update_data(idt=message.from_user.id)
     
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    for ds in available_dub_sub:
+        kb.add(ds)
+    
+    await message.answer("Choose dub or sub", reply_markup=kb)
+
+    await Add_handler.dub_or_sub.set()
+
+
+async def anime_dub_sub_chosen(message: types.Message, state: FSMContext):
+    logger.info("STATUS dub_sub")
+
+    ds = message.text
+    if ds not in available_dub_sub:
+        await message.answer("Use keyboard.")
+        return
+    
+    await state.update_data(dub_or_sub=ds)
+
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for status in available_status:
         kb.add(status)
 
-    await Add_handler.next()
 
     await message.answer("Choose status.", reply_markup=kb)
 
-
+    await Add_handler.status.set()
+    
 async def anime_status_chosen(message: types.Message, state: FSMContext):
     logger.info("STATUS status")
 
@@ -75,6 +95,7 @@ async def anime_episode_chosen(message: types.Message, state: FSMContext):
     await state.finish()
 
 
+
 async def insert_in_bd(bd: BD, state: FSMContext):
     user_data = await state.get_data()
     idt = user_data['idt']
@@ -91,5 +112,6 @@ async def insert_in_bd(bd: BD, state: FSMContext):
 def register_handlers_add(dp: Dispatcher):
     dp.register_message_handler(add_start, commands="add", state="*")
     dp.register_message_handler(anime_name_chosen, state=Add_handler.name)
+    dp.register_message_handler(anime_dub_sub_chosen, state=Add_handler.dub_or_sub)
     dp.register_message_handler(anime_status_chosen, state=Add_handler.status)
     dp.register_message_handler(anime_episode_chosen, state=Add_handler.episode)

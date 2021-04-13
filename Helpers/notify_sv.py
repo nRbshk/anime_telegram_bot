@@ -40,14 +40,14 @@ def get_episodes_sv(anime_id: str, dub_or_sub: str = "sub"):
 
     
 
-def get_link_sv(name, idt, notified_ep):
+def get_link_sv(name, idt, notified_ep, dub_or_sub):
     logger.info("START get_link_sv")
     
     anime_id = get_id_sv(name)
     if anime_id is None:
         return None
         
-    last_episode = get_episodes_sv(anime_id)
+    last_episode = get_episodes_sv(anime_id, dub_or_sub)
     if last_episode is None:
         return None
     
@@ -59,14 +59,14 @@ def get_link_sv(name, idt, notified_ep):
     logger.info("END get_link_sv")  
     return None
 
-def check_for_notification_sv(names: list, idt: list, notified_eps: list) -> dict:
+def check_for_notification_sv(names: list, idt: list, notified_eps: list, dub_or_subs: list) -> dict:
     logger.info("START check_for_notification_sv")
-    if len(names) != len(idt) or len(names) != len(notified_eps):
+    if len(names) != len(idt) or len(names) != len(notified_eps) or len(names) != len(dub_or_subs):
         logger.error("Length of names and idt and notified_ep must be the same")
         return 1
     title_url_names = {}
     for index in range(len(names)):
-        url = get_link_sv(names[index], idt[index], notified_eps[index])
+        url = get_link_sv(names[index], idt[index], notified_eps[index], dub_or_subs[index])
         if url is None:
             continue
         title_url_names[names[index]] = url

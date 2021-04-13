@@ -4,10 +4,9 @@ import logging
 from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.types import user
-from requests.api import get
 
-from BD import bd, available_dub_sub
+
+from BD import bd, available_dub_sub, DB_positions
 from Helpers.notify_sv import get_episodes_sv, get_id_sv
 
 
@@ -27,8 +26,8 @@ async def watch_start(message: types.Message):
 
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for r in response:
-        if r[-1] == 'sv':
-            kb.add(r[2])
+        if r[DB_positions.link_loc_position.value] == 'sv':
+            kb.add(r[DB_positions.name_position.value])
 
     del response
     await message.answer('Choose anime.', reply_markup=kb)
@@ -65,9 +64,13 @@ async def chosen_dub_sub(message: types.Message, state: FSMContext):
     anime_id = get_id_sv(name)
     if anime_id is None:
         await message.answer(f"No anime with name {name}", reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
     r_episodes = get_episodes_sv(anime_id, dub_or_sub=ds)
     if r_episodes is None:
         await message.answer(f"Anime {name} is not out", reply_markup=types.ReplyKeyboardRemove())
+        await state.finish()
+        return
 
     prep_data = [f"{name}\n\n"]
     for rep in r_episodes:

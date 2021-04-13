@@ -1,23 +1,38 @@
 from os import name
 import sqlite3
 from helpers import get_date
-
+from enum import Enum, unique
 import logging
 
 logger = logging.getLogger(__name__)
+
+@unique
+class DB_positions(Enum):
+    id_position = 0
+    id_telegram_position = 1
+    name_position = 2
+    status_position = 3
+    episode_position = 4
+    time_position = 5
+    add_time_position = 6
+    upd_time_position = 7
+    notified_ep_position = 8
+    link_loc_position = 9
+    dub_or_sub_position = 10
+
 
 
 available_status = ["done", "inProgress", "inList", "All"]
 available_link_locs = ["nb", "sv"]
 available_dub_sub = ['dub', 'sub']
 class BD:
-    def save_anime(self, idt_, name_, status_, episode_ = 0):
+    def save_anime(self, idt_, name_, status_, episode_ = 0, dub_or_sub_ = "sub"):
         logger.info("START save_anime")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
         try: 
-            cursor.execute("INSERT INTO anime VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (None, idt_, name_, status_, episode_, "00:00", get_date(), get_date(), episode_, "nb"))
+            cursor.execute("INSERT INTO anime VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (None, idt_, name_, status_, episode_, "00:00", get_date(), get_date(), episode_, "nb", dub_or_sub_))
         except:
             logger.error("ERROR")
             return 1
@@ -126,17 +141,18 @@ class BD:
         names = []
         idt = []
         notified_ep = []
-        
+        dub_or_sub = []
         for r in response:
-            names.append(r[2])
-            idt.append(r[1])
-            notified_ep.append(r[-2])
+            names.append(r[DB_positions.name_position.value])
+            idt.append(r[DB_positions.id_telegram_position.value])
+            notified_ep.append(r[DB_positions.notified_ep_position.value])
+            dub_or_sub.append(r[DB_positions.dub_or_sub_position.value])
 
         conn.close()
         del response
         
         logger.info("END select_notified_ep")
-        return names, idt, notified_ep
+        return names, idt, notified_ep, dub_or_sub
         
     def update_notified_ep(self, idt_, name_, notified_ep_, link_loc_: str ="nb"):
         logger.info("START update_notified_ep")
