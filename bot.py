@@ -30,9 +30,7 @@ async def set_commands(bot: Bot):
         BotCommand(command='/set_time', description='Set time for last episode'),
         BotCommand(command='/set_status', description="Set status for anime"),
         BotCommand(command='/set_episode', description="Set episode for anime"),
-        BotCommand(command='set_link_loc', description="Set link location for anime"),
-        BotCommand(command='/watch', description="Not Implemented")
-        # BotCommand(command='/watch', description="Watch anime with status inProgress")
+        BotCommand(command='/set_link_loc', description="Set link location for anime"),
     ]
 
     await bot.set_my_commands(commands)
