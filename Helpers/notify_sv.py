@@ -1,6 +1,6 @@
 import logging
 from requests import get
-
+from asyncio import sleep
 
 logger = logging.getLogger(__name__)
 
@@ -59,13 +59,14 @@ def get_link_sv(name, idt, notified_ep, dub_or_sub):
     logger.info("END get_link_sv")  
     return None
 
-def check_for_notification_sv(names: list, idt: list, notified_eps: list, dub_or_subs: list) -> dict:
+async def check_for_notification_sv(names: list, idt: list, notified_eps: list, dub_or_subs: list) -> dict:
     logger.info("START check_for_notification_sv")
     if len(names) != len(idt) or len(names) != len(notified_eps) or len(names) != len(dub_or_subs):
         logger.error("Length of names and idt and notified_ep must be the same")
         return 1
     title_url_names = {}
     for index in range(len(names)):
+        await sleep(1)
         url = get_link_sv(names[index], idt[index], notified_eps[index], dub_or_subs[index])
         if url is None:
             continue

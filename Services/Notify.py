@@ -41,7 +41,7 @@ async def notify_sv(bot: Bot):
 
         names_to_check, idts_, notified_eps, dub_or_sub = bd.select_notified_ep("sv")        
 
-        dict_name_url = check_for_notification_sv(names_to_check, idts_, notified_eps, dub_or_sub)
+        dict_name_url = await check_for_notification_sv(names_to_check, idts_, notified_eps, dub_or_sub)
 
         for k, v in dict_name_url.items():
             url, idt, notified_ep_ = v.split(",")
