@@ -62,7 +62,7 @@ async def chosen_link_loc(message: types.Message, state: FSMContext):
 
     await update_in_bd(state)
 
-    await message.answer(f"Link location {link_loc} for anime\n{name}\n was setted.", reply_markup=types.ReplyKeyboardRemove())
+    await message.answer(f"Link location {link_loc} for anime\n{name}\nwas setted.", reply_markup=types.ReplyKeyboardRemove())
 
     await state.finish()
     

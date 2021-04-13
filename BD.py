@@ -19,6 +19,7 @@ class BD:
         try: 
             cursor.execute("INSERT INTO anime VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (None, idt_, name_, status_, episode_, "00:00", get_date(), get_date(), episode_, "nb"))
         except:
+            logger.error("ERROR")
             return 1
         conn.commit()
         
@@ -58,8 +59,8 @@ class BD:
 
         conn.commit()
 
-        conn.close()
         logger.info("END set_time")
+        conn.close()
 
 
     def set_status(self, idt_, name_, status_):
@@ -74,9 +75,9 @@ class BD:
 
         conn.commit()
 
+        logger.info("END set_status")
         conn.close()
 
-        logger.info("END set_status")
 
 
     def set_episode(self, idt_, name_, episode_):
@@ -93,8 +94,8 @@ class BD:
 
         conn.commit()
 
-        conn.close()
         logger.info("END set_episode")
+        conn.close()
 
     def set_link_loc(self, idt_, name_, link_loc_):
         logger.info("START set_link_loc")
@@ -108,9 +109,9 @@ class BD:
 
         conn.commit()
 
+        logger.info("END set_link_loc")
         conn.close()
 
-        logger.info("END set_link_loc")
 
 
     def select_notified_ep(self, link_loc_: str = "nb"):
@@ -150,8 +151,7 @@ class BD:
         
         conn.commit()
 
-        conn.close()
-
         logger.info("END update_notified_ep")
+        conn.close()
 
 bd = BD()

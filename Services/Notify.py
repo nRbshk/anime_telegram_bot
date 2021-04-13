@@ -23,7 +23,7 @@ async def notify(bot: Bot):
         for k, v in dict_name_url.items():
             url, idt, notified_ep_ = v.split(",")
 
-            pre_text = f"Episode {notified_ep_} is OUT\nAnime {k}\n{url}"
+            pre_text = f"Episode {notified_ep_} is OUT\n{k}\n{url}"
             
             await bot.send_message(idt, pre_text)
 
@@ -46,7 +46,7 @@ async def notify_sv(bot: Bot):
         for k, v in dict_name_url.items():
             url, idt, notified_ep_ = v.split(",")
 
-            pre_text = f"Episode {notified_ep_} is OUT\nAnime {k}\n{url}"
+            pre_text = f"Episode {notified_ep_} is OUT\n{k}\n{url}"
 
             await bot.send_message(idt, pre_text)
 

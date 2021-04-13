@@ -11,12 +11,17 @@ async def cmd_start(message: types.Message, state: FSMContext):
     logger.info("CMD start or help")
     await state.finish()
     text = []
+    text.append("/cancel - Cancel last command\n")
     text.append("/add - Add anime to list\n")
+    text.append("/show - Show anime by status\n")
+    text.append("/set_time - Set time for last episode\n")
+    text.append("/set_status - Set status for anime\n")
+    text.append("/set_episode - Set episode for anime\n")
+    text.append("/set_link_loc - Set link location for anime\n")
     await message.answer(
         "".join(text),
         reply_markup=types.ReplyKeyboardRemove()
     )
-
 
 async def cmd_cancel(message: types.Message, state: FSMContext):
     logger.info("CMD cancel")
