@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 # id id_telegram name status episode time add_time upd_time notified
 # int int text text text text text text text
 available_status = ["done", "inProgress", "inList", "All"]
+available_link_locs = ["nb", "sv"]
 class BD:
     def save_anime(self, idt_, name_, status_, episode_ = 0):
         logger.info("START save_anime")
@@ -69,7 +70,6 @@ class BD:
         upd_time_ = get_date()
 
         cursor.execute("UPDATE anime SET status=? WHERE id_telegram=? AND name=?", (status_, idt_, name_))
-        cursor.execute("UPDATE anime SET notified=? WHERE id_telegram=? AND name=?", ("False", idt_, name_))
         cursor.execute("UPDATE anime SET upd_time=? WHERE id_telegram=? AND name=?", (upd_time_, idt_, name_))
 
         conn.commit()
@@ -87,7 +87,6 @@ class BD:
         upd_time_ = get_date()
 
         cursor.execute("UPDATE anime SET episode=? WHERE id_telegram=? AND name=?", (episode_, idt_, name_))
-        cursor.execute("UPDATE anime SET notified=? WHERE id_telegram=? AND name=?", ("False", idt_, name_))
         cursor.execute("UPDATE anime SET time=? WHERE id_telegram=? AND name=?", ("00:00", idt_, name_))
         cursor.execute("UPDATE anime SET upd_time=? WHERE id_telegram=? AND name=?", (upd_time_, idt_, name_))
 
@@ -96,6 +95,22 @@ class BD:
 
         conn.close()
         logger.info("END set_episode")
+
+    def set_link_loc(self, idt_, name_, link_loc_):
+        logger.info("START set_link_loc")
+        conn = sqlite3.connect("db.db")
+        cursor = conn.cursor()
+
+        upd_time_ = get_date()
+
+        cursor.execute("UPDATE anime SET link_loc=? WHERE id_telegram=? AND name=?", (link_loc_, idt_, name_))
+        cursor.execute("UPDATE anime SET upd_time=? WHERE id_telegram=? AND name=?", (upd_time_, idt_, name_))
+
+        conn.commit()
+
+        conn.close()
+
+        logger.info("END set_link_loc")
 
 
     def select_notified_ep(self, link_loc_: str = "nb"):
