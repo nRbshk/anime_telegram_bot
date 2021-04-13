@@ -20,8 +20,8 @@ def get_id_sv(name: str):
     logger.info("END get_id_sv")
     return response[0]['anime_id']
 
-def get_last_episode_sv(anime_id: str):
-    logger.info("START get_last_episode_sv")
+def get_episodes_sv(anime_id: str):
+    logger.info("START get_episodes_sv")
 
     url = f"https://service.sovetromantica.com/v1/anime/{anime_id}/episodes"
     headers = {"accept" : "application/json"}
@@ -38,7 +38,7 @@ def get_link_sv(name, idt, notified_ep):
 
     anime_id = get_id_sv(name)
 
-    last_episode = get_last_episode_sv(anime_id)
+    last_episode = get_episodes_sv(anime_id)
     if last_episode['episode_count'] > int(notified_ep):
         pre_value = last_episode['embed'] + "," + str(idt) + "," +  str(last_episode['episode_count'])
         return pre_value
