@@ -2,7 +2,6 @@ import logging
 
 from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import state
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 from BD import BD, bd, available_status
