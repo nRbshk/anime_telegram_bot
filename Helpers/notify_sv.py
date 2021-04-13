@@ -41,7 +41,7 @@ def get_episodes_sv(anime_id: str):
 
 def get_link_sv(name, idt, notified_ep):
     logger.info("START get_link_sv")
-
+    
     anime_id = get_id_sv(name)
     if anime_id is None:
         return None

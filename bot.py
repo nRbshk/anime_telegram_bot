@@ -13,6 +13,8 @@ from Handlers.Set_time_handler import register_handlers_set_time
 from Handlers.Set_status_handler import register_handlers_set_status
 from Handlers.Set_episode_handler import register_handlers_set_episode
 from Handlers.Set_link_loc_handler import register_handlers_set_link_loc
+from Handlers.Watch_handler import register_handlers_watch
+
 
 from Services.Notify import notify, notify_sv
 
@@ -31,6 +33,7 @@ async def set_commands(bot: Bot):
         BotCommand(command='/set_status', description="Set status for anime"),
         BotCommand(command='/set_episode', description="Set episode for anime"),
         BotCommand(command='/set_link_loc', description="Set link location for anime"),
+        BotCommand(command='/watch', description="Sending link for last episode if exists. Available only for link location = 'sv'"),
     ]
 
     await bot.set_my_commands(commands)
@@ -58,6 +61,7 @@ async def start():
     register_handlers_set_status(dp)
     register_handlers_set_episode(dp)
     register_handlers_set_link_loc(dp)
+    register_handlers_watch(dp)
 
     create_task(notify(bot))
     create_task(notify_sv(bot))
