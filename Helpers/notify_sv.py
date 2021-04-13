@@ -22,7 +22,8 @@ def get_id_sv(name: str):
         return response[0]['anime_id']
     return None
 
-def get_episodes_sv(anime_id: str):
+def get_episodes_sv(anime_id: str, dub_or_sub: str = "sub"):
+    ds_dict = {"dub": 1, "sub": 0}
     logger.info("START get_episodes_sv")
 
     url = f"https://service.sovetromantica.com/v1/anime/{anime_id}/episodes"
@@ -30,7 +31,7 @@ def get_episodes_sv(anime_id: str):
 
     response = get(url, headers=headers).json()
 
-    episodes = [r for r in response if r['episode_type'] == 0]
+    episodes = [r for r in response if r['episode_type'] == ds_dict[dub_or_sub]]
     
     logger.info("END get_episodes_sv")
     if len(episodes) > 0:
