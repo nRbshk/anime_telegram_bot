@@ -5,11 +5,11 @@ from helpers import get_date
 import logging
 
 logger = logging.getLogger(__name__)
-# # ANIME table
-# id id_telegram name status episode time add_time upd_time notified
-# int int text text text text text text text
+
+
 available_status = ["done", "inProgress", "inList", "All"]
 available_link_locs = ["nb", "sv"]
+available_dub_sub = ['dub', 'sub']
 class BD:
     def save_anime(self, idt_, name_, status_, episode_ = 0):
         logger.info("START save_anime")

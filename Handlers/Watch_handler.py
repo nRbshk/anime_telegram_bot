@@ -7,32 +7,30 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import user
 from requests.api import get
 
-from BD import bd, available_link_locs
-from Helpers.notify_sv import get_episodes_sv, get_id_sv, get_link_sv
+from BD import bd, available_dub_sub
+from Helpers.notify_sv import get_episodes_sv, get_id_sv
 
 
 class Watch_handler(StatesGroup):
 
     name = State()
+    dub_or_sub = State()
 
 
 
 logger = logging.getLogger(__name__)
 
 
-async def watch_start(message: types.Message, state: FSMContext):
+async def watch_start(message: types.Message):
     logger.info("START watch start")
     response = bd.show(message.from_user.id, 'All')
 
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    resp = []
     for r in response:
         if r[-1] == 'sv':
             kb.add(r[2])
-            resp.append(r)
 
     del response
-    await state.update_data(resp=resp)
     await message.answer('Choose anime.', reply_markup=kb)
 
     await Watch_handler.name.set()
@@ -46,19 +44,28 @@ async def chosen_anime(message: types.Message, state: FSMContext):
 
     await state.update_data(name=name)
 
-    user_data = await state.get_data()
 
-    resp = user_data['resp']
-
-    # last_episode = 0
-    # for r in resp:
-    #     if name == r[2]:
-    #         last_episode = r[4]
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    for ds in available_dub_sub:
+        kb.add(ds)
     
+    await message.answer("Choose dub or sub", reply_markup=kb)
+
+    await Watch_handler.dub_or_sub.set()
+    
+async def chosen_dub_sub(message: types.Message, state: FSMContext):
+    ds = message.text
+    if ds not in available_dub_sub:
+        message.answer("Use keyboard")
+        return
+    
+    user_data = await state.get_data()
+    name = user_data['name']
+
     anime_id = get_id_sv(name)
     if anime_id is None:
         await message.answer(f"No anime with name {name}", reply_markup=types.ReplyKeyboardRemove())
-    r_episodes = get_episodes_sv(anime_id)
+    r_episodes = get_episodes_sv(anime_id, dub_or_sub=ds)
     if r_episodes is None:
         await message.answer(f"Anime {name} is not out", reply_markup=types.ReplyKeyboardRemove())
 
@@ -69,11 +76,10 @@ async def chosen_anime(message: types.Message, state: FSMContext):
         prep_data.append(f"Episode {episode}\n{link}\n")
 
     await message.answer("".join(prep_data), reply_markup=types.ReplyKeyboardRemove())
-
+ 
     await state.finish()
-    
-
 
 def register_handlers_watch(dp: Dispatcher):
     dp.register_message_handler(watch_start, commands="watch", state="*")
     dp.register_message_handler(chosen_anime, state=Watch_handler.name)
+    dp.register_message_handler(chosen_dub_sub, state=Watch_handler.dub_or_sub)
