@@ -22,9 +22,11 @@ def get_date():
     return f'{day}.{month}.{year}'
 
 
-def check_page(names_to_check: list, idt: list) -> dict:
+def check_page(names_to_check: list, idt: list, notified_ep: list) -> dict:
     """
-    :param name_to_check: list to check
+    :param names_to_check: list to check
+    :param idt: idt
+    :param notified_ep: last notified ep
     :return: :class:`dict` with key name and value url, idt
     """
 
@@ -52,53 +54,60 @@ def check_page(names_to_check: list, idt: list) -> dict:
     add_to_link = get_base_link()
     for index in range(len(find_title_relative)):
 
-        if findall("(манга)", find_title_relative[index].text.lower()) or findall(".+ожидается", find_cont_newscont[index].text.lower()):
+
+        if findall("(манга)", find_title_relative[index].text.lower()) \
+            or findall(".+ожидается", find_cont_newscont[index].text.lower()):
             continue
 
         title_name = find_title_relative[index].text
 
+        current_ep = int(find_title_relative[index].text.split(' ')[-2])
+
         for jndex in range(len(names_to_check)):
 
-            if findall(f'.*{names_to_check[jndex].lower()}.*', title_name.lower()):
+            if findall(f'.*{names_to_check[jndex].lower()}.*', title_name.lower()) and current_ep > notified_ep[jndex]:
                 a = soup.find('a', href=True, text=title_name)
 
                 url = add_to_link + a['href']
                 
-                title_url_names[names_to_check[jndex]] = str(get_link(url) + ',' + str(idt[jndex]))
+                title_url_names[names_to_check[jndex]] = str(get_base_link() + a['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
+                # title_url_names[names_to_check[jndex]] = str(get_link(url) + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
                 names_to_check.remove(names_to_check[jndex])
                 idt.remove(idt[jndex])
+                notified_ep.remove(notified_ep[jndex])
 
 
                 break
 
     del find_title_relative
     del find_cont_newscont
-
+    logger.info("END Checking page")
     return title_url_names
     
-def get_link(url):
-    logger.info(f"Getting link with url `{url}`")
-    from bs4 import BeautifulSoup
+# def get_link(url):
+#     logger.info(f"Getting link with url `{url}`")
+#     from bs4 import BeautifulSoup
 
-    from selenium import webdriver
-    """
-    :param url: url for find link
-    :return: :class:`str` link
-    """
-    chrome_options, path = setup_chrome()
+#     from selenium import webdriver
+#     """
+#     :param url: url for find link
+#     :return: :class:`str` link
+#     """
+#     chrome_options, path = setup_chrome()
 
-    driver = webdriver.Chrome(executable_path="chromedriver.exe", options=chrome_options)
+#     driver = webdriver.Chrome(executable_path="chromedriver.exe", options=chrome_options)
 
-    driver.get(url)
-    driver.find_element_by_xpath('//*[@id="ep3"]').click()
+#     driver.get(url)
+#     driver.find_element_by_xpath('//*[@id="ep3"]').click()
     
-    driver.implicitly_wait(2)
-    find_player = driver.find_element_by_xpath('//*[@id="player0"]').get_attribute("innerHTML").splitlines()[0]
-    soup = BeautifulSoup(find_player, 'lxml')
-    iframe = soup.find("iframe")
+#     driver.implicitly_wait(2)
+#     find_player = driver.find_element_by_xpath('//*[@id="player0"]').get_attribute("innerHTML").splitlines()[0]
+#     soup = BeautifulSoup(find_player, 'lxml')
+#     iframe = soup.find("iframe")
 
-    return iframe['src'][2:]
+#     logger.info(f'END get link with data {iframe["src"][2:]}')
+#     return iframe['src'][2:]
 
 
 # def get_link(url):

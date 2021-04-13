@@ -89,37 +89,37 @@ class BD:
         conn.close()
 
 
-    def select_notify(self, notify: str = "False"):
-        logger.info("SELECT NOTIFY")
+    def select_notified_ep(self):
+        logger.info("SELECT notified ep")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM anime WHERE notified=? and status=?", (notify, "inProgress"))
+        cursor.execute("SELECT * FROM anime WHERE status=?", ("inProgress",))
 
         response = cursor.fetchall()
         
         names = []
         idt = []
+        notified_ep = []
         
         for r in response:
             names.append(r[2])
             idt.append(r[1])
+            notified_ep.append(r[-1])
 
         conn.close()
-
         del response
         
-        return names, idt
+        return names, idt, notified_ep
         
-    def update_notify(self, idt_, name_, notify: str = "True"):
-        logger.info("UPDATE NOTIFY")
+    def update_notified_ep(self, idt_, name_, notified_ep_):
+        logger.info("UPDATE notified ep")
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
         upd_time_ = get_date()
 
-
-        cursor.execute("UPDATE anime SET notified=? WHERE id_telegram=? AND name=?", (notify, idt_, name_))
+        cursor.execute("UPDATE anime SET notified_ep=? WHERE id_telegram=? AND name=?", (notified_ep_, idt_, name_))
         cursor.execute("UPDATE anime SET upd_time=? WHERE id_telegram=? AND name=?", (upd_time_, idt_, name_))
 
         
