@@ -13,7 +13,7 @@ from Handlers.Set_time_handler import register_handlers_set_time
 from Handlers.Set_status_handler import register_handlers_set_status
 from Handlers.Set_episode_handler import register_handlers_set_episode
 
-from Services.Notify import notify
+from Services.Notify import notify, notify_sv
 
 from asyncio import create_task
 
@@ -59,6 +59,7 @@ async def start():
     register_handlers_set_episode(dp)
 
     create_task(notify(bot))
+    create_task(notify_sv(bot))
 
     await set_commands(bot)
 
