@@ -51,7 +51,6 @@ def check_page(names_to_check: list, idt: list, notified_ep: list) -> dict:
 
     title_url_names = {}
 
-    add_to_link = get_base_link()
     for index in range(len(find_title_relative)):
 
 
@@ -68,10 +67,7 @@ def check_page(names_to_check: list, idt: list, notified_ep: list) -> dict:
             if findall(f'.*{names_to_check[jndex].lower()}.*', title_name.lower()) and current_ep > notified_ep[jndex]:
                 a = soup.find('a', href=True, text=title_name)
 
-                url = add_to_link + a['href']
-                
                 title_url_names[names_to_check[jndex]] = str(get_base_link() + a['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
-                # title_url_names[names_to_check[jndex]] = str(get_link(url) + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
                 names_to_check.remove(names_to_check[jndex])
                 idt.remove(idt[jndex])
