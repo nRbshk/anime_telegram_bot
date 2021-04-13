@@ -40,7 +40,7 @@ def get_episodes_sv(anime_id: str):
     
 
 def get_link_sv(name, idt, notified_ep):
-    logger.info("START get_link_last_ep_sv")
+    logger.info("START get_link_sv")
 
     anime_id = get_id_sv(name)
     if anime_id is None:
@@ -49,12 +49,13 @@ def get_link_sv(name, idt, notified_ep):
     last_episode = get_episodes_sv(anime_id)
     if last_episode is None:
         return None
+    
     last_episode = last_episode[-1]
     if last_episode['episode_count'] > int(notified_ep):
         pre_value = last_episode['embed'] + "," + str(idt) + "," +  str(last_episode['episode_count'])
         return pre_value
 
-    logger.info("END get_link_last_ep_sv")  
+    logger.info("END get_link_sv")  
     return None
 
 def check_for_notification_sv(names: list, idt: list, notified_eps: list) -> dict:
