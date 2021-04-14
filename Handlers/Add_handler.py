@@ -102,8 +102,9 @@ async def insert_in_bd(bd: BD, state: FSMContext):
     name = user_data['chosen_name']
     status = user_data['status']
     ep = user_data['episode']
-    if not bd.save_anime(idt, name, status, ep):
-        logger.info(f"insert in BD with data name={name} status={status} episode={ep}")
+    ds = user_data['dub_or_sub']
+    if not bd.save_anime(idt, name, status, ep, ds):
+        logger.info(f"insert in BD with data name={name} status={status} episode={ep} dub_or_sub={ds}")
     else:
         logger.error(f'Error when insert in BD')
 

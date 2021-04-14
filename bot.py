@@ -69,4 +69,4 @@ async def start():
     await set_commands(bot)
 
 
-    await dp.start_polling()
+    await dp.start_polling(timeout=600)
