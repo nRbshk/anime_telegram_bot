@@ -3,7 +3,7 @@ import logging
 from unseen_func import get_download_format, get_episode_format, get_base_link
 from requests import get
 from bs4 import BeautifulSoup
-from re import findall
+from re import findall, compile
 
 
 logger = logging.getLogger(__name__)
@@ -44,22 +44,20 @@ def find_entries(find_title_relative: list, find_cont_newscont: list, names: lis
     logger.info("START find_entries")
     title_url_names = {}
 
+    title_names = [img['title'] for img in soup.find_all('img', title=True)]
+    
     for index in range(len(find_title_relative)):
-
-
-        if findall("(манга)", find_title_relative[index].text.lower()) \
+    
+        if findall("(манга)", title_names[index]) \
             or findall(".+ожидается", find_cont_newscont[index].text.lower()):
             continue
 
-        title_name = find_title_relative[index].text
 
-        current_ep = int(find_title_relative[index].text.split(' ')[-2])
+        current_ep = int(title_names[index].split(' ')[-2])
 
         for jndex in range(len(names)):
-
-            if findall(f'.*{names[jndex].lower()}.*', title_name.lower()) and current_ep > notified_eps[jndex]:
-                a = soup.find('a', href=True, text=title_name)
-
+            if findall(f'.*{names[jndex].lower()}.*', title_names[index].lower()) and current_ep > notified_eps[jndex]:
+                a = soup.find('a', text = compile(find_title_relative[index].text),  href=True)
                 title_url_names[names[jndex]] = str(get_base_link("nb") + a['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
                 names.remove(names[jndex])
