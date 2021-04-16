@@ -43,7 +43,7 @@ async def start():
     logging.basicConfig(
         filename='log.log',
         filemode='w',
-        level=logging.NOTSET,
+        level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
         datefmt='%d-%m-%y %H:%M:%S'
     )

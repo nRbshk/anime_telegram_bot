@@ -57,7 +57,7 @@ def find_entries(find_title_relative: list, find_cont_newscont: list, names: lis
 
         for jndex in range(len(names)):
             if findall(f'.*{names[jndex].lower()}.*', title_names[index].lower()) and current_ep > notified_eps[jndex]:
-                a = soup.find('a', text = compile(find_title_relative[index].text),  href=True)
+                a = soup.find('a', text = find_title_relative[index].text,  href=True)
                 title_url_names[names[jndex]] = str(get_base_link("nb") + a['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
                 names.remove(names[jndex])
