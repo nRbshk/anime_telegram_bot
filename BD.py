@@ -39,7 +39,7 @@ class BD:
             if idt == idt_ and name == name_:
                 logger.error(f"USER {idt_} and anime {name_} is existsing in bd.")
                 del list_to_check
-                return 1
+                return 2
         del list_to_check
 
         try: 
