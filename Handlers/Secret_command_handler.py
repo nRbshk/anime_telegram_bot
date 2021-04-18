@@ -25,7 +25,7 @@ async def secret_command_start(message: types.Message):
         dub_or_sub = text[3]
         nb_or_sv = text[4]
         status = "inProgress"
-        prepared_text = f"Anime {name} with {episode} added."
+        prepared_text = f"Anime {name} with episode {episode} added."
         send = bd.save_anime(idt, name, status, episode, dub_or_sub, nb_or_sv)
 
     elif cmd == '/secret_set_episode':
