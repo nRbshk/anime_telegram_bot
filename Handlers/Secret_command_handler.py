@@ -38,7 +38,7 @@ async def secret_command_start(message: types.Message):
     elif send == 1:
         await message.answer("Error was ocured while inserting in bd.")
     elif send == 2:
-        await message.answer("Anime already in your list.")
+        await message.answer(f"Anime {name} already in your list.")
     
 
 
