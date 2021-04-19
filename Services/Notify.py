@@ -2,7 +2,7 @@ import logging
 
 from asyncio import sleep
 
-from BD import bd
+from BD.BD import bd
 
 from Helpers.notify_sv import check_for_notification_sv
 from Helpers.notify_nb import check_for_notification_nb

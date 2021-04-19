@@ -4,7 +4,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD import BD, bd, available_status, available_dub_sub
+from BD.BD import BD, bd, available_status, available_dub_sub
 available_status = available_status[:-1]
 
 logger = logging.getLogger(__name__)

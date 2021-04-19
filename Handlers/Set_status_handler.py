@@ -5,7 +5,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD import bd, available_status
+from BD.BD import bd, available_status
 
 class Set_status_handler(StatesGroup):
 

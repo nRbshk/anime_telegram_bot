@@ -4,7 +4,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD import bd
+from BD.BD import bd
 
 class Set_episode_handler(StatesGroup):
 

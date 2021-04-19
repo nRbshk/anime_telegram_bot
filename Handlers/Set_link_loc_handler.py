@@ -5,7 +5,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD import bd, available_link_locs
+from BD.BD import bd, available_link_locs
 
 class Set_link_loc_handler(StatesGroup):
 

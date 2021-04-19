@@ -1,7 +1,7 @@
 import logging
 
 from os.path import exists
-from unseen_func import get_download_format, get_episode_format, get_base_link
+from .unseen_func import get_download_format, get_episode_format, get_base_link
 from requests import get
 from bs4 import BeautifulSoup
 from re import findall

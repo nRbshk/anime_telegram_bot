@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher, executor
 from aiogram.types import BotCommand
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from helpers import get_token
+from Helpers.helpers import get_token
 
 from Handlers.Add_handler import register_handlers_add
 from Handlers.Common_handler import register_handlers_common
@@ -21,6 +21,8 @@ from Services.Notify import notify, notify_sv
 from asyncio import create_task
 
 logger = logging.getLogger(__name__)
+
+proxy_url = ""
 
 async def set_commands(bot: Bot):
     commands = [
@@ -50,7 +52,7 @@ async def start():
     logger.info("Starting bot")
 
 
-    bot = Bot(token=get_token())
+    bot = Bot(token=get_token(), proxy=proxy_url)
     dp = Dispatcher(bot, storage=MemoryStorage())
 
 

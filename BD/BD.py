@@ -1,6 +1,6 @@
 from os import name
 import sqlite3
-from helpers import get_date
+from Helpers.helpers import get_date
 from enum import Enum, unique
 import logging
 
@@ -41,7 +41,6 @@ class BD:
                 del list_to_check
                 return 2
         del list_to_check
-
         try: 
             cursor.execute("INSERT INTO anime VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (None, idt_, name_, status_, episode_, "00:00", get_date(), get_date(), episode_, nb_or_sv, dub_or_sub_))
         except:

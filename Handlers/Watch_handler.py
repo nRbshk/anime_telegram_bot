@@ -6,7 +6,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 
-from BD import bd, available_dub_sub, DB_positions
+from BD.BD import bd, available_dub_sub, DB_positions
 from Helpers.notify_sv import get_episodes_sv, get_id_sv
 
 
