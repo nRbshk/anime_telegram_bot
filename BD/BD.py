@@ -31,7 +31,7 @@ class BD:
         conn = sqlite3.connect("db.db")
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM anime WHERE id_telegram=? AND name=?", (idt_, name_,));
+        cursor.execute("SELECT * FROM anime WHERE id_telegram=? AND name=?", (idt_, name_,))
         list_to_check = cursor.fetchall()
         for l in list_to_check:
             idt = l[DB_positions.id_telegram_position.value]
@@ -39,12 +39,14 @@ class BD:
             if idt == idt_ and name == name_:
                 logger.error(f"USER {idt_} and anime {name_} is existsing in bd.")
                 del list_to_check
+                conn.close()
                 return 2
         del list_to_check
         try: 
             cursor.execute("INSERT INTO anime VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (None, idt_, name_, status_, episode_, "00:00", get_date(), get_date(), episode_, nb_or_sv, dub_or_sub_))
         except:
             logger.error("ERROR")
+            conn.close()
             return 1
         conn.commit()
         

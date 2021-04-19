@@ -14,7 +14,7 @@ from Handlers.Set_status_handler import register_handlers_set_status
 from Handlers.Set_episode_handler import register_handlers_set_episode
 from Handlers.Set_link_loc_handler import register_handlers_set_link_loc
 from Handlers.Watch_handler import register_handlers_watch
-
+from Handlers.Secret_command_handler import register_handlers_secret_command
 
 from Services.Notify import notify, notify_sv
 
@@ -64,6 +64,7 @@ async def start():
     register_handlers_set_episode(dp)
     register_handlers_set_link_loc(dp)
     register_handlers_watch(dp)
+    register_handlers_secret_command(dp)
 
     create_task(notify(bot))
     create_task(notify_sv(bot))
