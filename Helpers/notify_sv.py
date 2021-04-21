@@ -15,7 +15,12 @@ def get_id_sv(name: str):
 
     params = {"anime_name" : name}
 
-    response = get(url, headers=headers, params=params).json()
+    response = get(url, headers=headers, params=params)
+
+    if response.status_code != 200:
+        return None
+    
+    response = response.json()
 
     logger.info("END get_id_sv")
     if response[0]:
@@ -29,7 +34,12 @@ def get_episodes_sv(anime_id: str, dub_or_sub: str = "sub"):
     url = f"https://service.sovetromantica.com/v1/anime/{anime_id}/episodes"
     headers = {"accept" : "application/json"}
 
-    response = get(url, headers=headers).json()
+    response = get(url, headers=headers)
+
+    if response.status_code != 200:
+        return None
+    
+    response = response.json()
 
     episodes = [r for r in response if r['episode_type'] == ds_dict[dub_or_sub]]
     
