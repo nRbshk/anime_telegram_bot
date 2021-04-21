@@ -44,16 +44,25 @@ def find_entries(find_title_relative: list, find_cont_newscont: list, names: lis
     logger.info("START find_entries")
     title_url_names = {}
 
+    # title_names = [img for img in soup.find_all('img', href=True)]
+    # print(title_names)
     for index in range(len(find_title_relative)):
         title_name = soup.find('a', text=find_title_relative[index].text, href=True)
-
+        
         if findall("(манга)", title_name.text) \
             or findall(".+ожидается", find_cont_newscont[index].text.lower()):
             continue
-        current_ep = int(title_name.text.split(' ')[-2])
-
+        
+        # current_ep = int(title_name['href'].split('/')[-2].split('_')[-2])
         for jndex in range(len(names)):
-            if findall(f'.*{names[jndex].lower()}.*', title_name.text.lower()) and current_ep > notified_eps[jndex]:
+            temp = soup.find_all('img', title=compile(names[jndex])) 
+            if len(temp) == 0:
+                continue
+            title_name_to_re = temp[0]['title']
+            current_ep = int(title_name_to_re.split(" ")[-2])
+            
+            if findall(f'.*{names[jndex].lower()}.*', title_name_to_re.lower()) and current_ep > notified_eps[jndex]:
+                print('ke')
                 title_url_names[names[jndex]] = str(get_base_link("nb") + title_name['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
                 names.remove(names[jndex])
