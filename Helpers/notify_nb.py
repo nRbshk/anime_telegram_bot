@@ -60,9 +60,8 @@ def find_entries(find_title_relative: list, find_cont_newscont: list, names: lis
                 continue
             title_name_to_re = temp[0]['title']
             current_ep = int(title_name_to_re.split(" ")[-2])
-            
+
             if findall(f'.*{names[jndex].lower()}.*', title_name_to_re.lower()) and current_ep > notified_eps[jndex]:
-                print('ke')
                 title_url_names[names[jndex]] = str(get_base_link("nb") + title_name['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
                 names.remove(names[jndex])
