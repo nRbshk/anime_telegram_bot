@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 async def notify(bot: Bot):
-    delay = 60 * 60
+    delay = 60 * 30
     while True:
         logger.info("notify")
         names_to_check, idts, notified_eps, _ = bd.select_notified_ep('nb')
@@ -34,7 +34,7 @@ async def notify(bot: Bot):
 
 
 async def notify_sv(bot: Bot):
-    delay = 60 * 60
+    delay = 60 * 30
 
     while True:
         logger.info("notify sv")

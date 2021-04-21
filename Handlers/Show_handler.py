@@ -40,7 +40,7 @@ async def chosen_status(message: types.Message, state: FSMContext):
     else:
         text = []
         for r in response:
-            tmp = f"{r[2]}\nEpisode: {r[4]}\nTime: {r[5]}\n\n"
+            tmp = f"{r[2]}\nLast viewed episode: {r[4]}\nTime: {r[5]}\n\n"
             text.append(tmp)
 
         await message.answer("".join(text), reply_markup=types.ReplyKeyboardRemove())
