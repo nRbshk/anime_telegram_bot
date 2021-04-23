@@ -55,8 +55,11 @@ def find_entries(find_title_relative: list, find_cont_newscont: list, names: lis
             if len(temp) == 0:
                 continue
             current_ep = int(temp[0]['title'].split(" ")[-2]) # getting episode
-            title_name_to_re = " ".join(title_name.text.split(" ")[0:-1]) # removing last word as its can end on "na..."
-
+            if findall(f'.*(\.\.\.).*', title_name.text):
+                title_name_to_re = " ".join(title_name.text.split(" ")[0:-1]) # removing last word as its can end on "na..."
+            else:
+                title_name_to_re = " ".join(title_name.text.split(" ")[0:-2]) # removing 2 episode
+            
             if findall(f'.*{title_name_to_re.lower()}.*', names[jndex].lower()) and current_ep > notified_eps[jndex]:
                 title_url_names[names[jndex]] = str(get_base_link("nb") + title_name['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
