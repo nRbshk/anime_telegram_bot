@@ -4,7 +4,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD.BD import BD, bd, available_status
+from BD.BD import BD, bd, available_status, DB_positions
 
 class Show_handler(StatesGroup):
 
@@ -40,7 +40,7 @@ async def chosen_status(message: types.Message, state: FSMContext):
     else:
         text = []
         for r in response:
-            tmp = f"{r[2]}\nLast viewed episode: {r[4]}\nTime: {r[5]}\n\n"
+            tmp = f"{r[DB_positions.name_position.value]}\nLast episode viewed: {r[DB_positions.episode_position.value]} / {r[DB_positions.notified_ep_position.value]}\nTime: {r[DB_positions.time_position.value]}\n\n"
             text.append(tmp)
 
         await message.answer("".join(text), reply_markup=types.ReplyKeyboardRemove())
