@@ -65,7 +65,7 @@ def find_entries(find_title_relative: list, find_cont_newscont: list, names: lis
             title_name_exists_in_names = findall(f'.*{title_name_to_re.lower()}.*', names[jndex].lower())
             is_current_ep_greater_than_notified = current_ep > notified_eps[jndex]
             
-            if title_name_exists_in_names or is_current_ep_greater_than_notified:
+            if title_name_exists_in_names and is_current_ep_greater_than_notified:
                 title_url_names[names[jndex]] = str(get_base_link("nb") + title_name['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
                 names.remove(names[jndex])
