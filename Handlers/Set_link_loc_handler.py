@@ -5,7 +5,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD.BD import bd, available_link_locs
+from DB.DB import db, available_link_locs
 
 class Set_link_loc_handler(StatesGroup):
 
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 async def set_link_loc_start(message: types.Message):
-    response = bd.show(message.from_user.id, 'All')
+    response = db.show(message.from_user.id, 'All')
 
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for r in response:
@@ -60,19 +60,19 @@ async def chosen_link_loc(message: types.Message, state: FSMContext):
 
     await state.update_data(link_loc=link_loc)
 
-    await update_in_bd(state)
+    await update_in_db(state)
 
     await message.answer(f"Link location {link_loc} for anime\n{name}\nwas setted.", reply_markup=types.ReplyKeyboardRemove())
 
     await state.finish()
     
-async def update_in_bd(state: FSMContext):
+async def update_in_db(state: FSMContext):
     user_data = await state.get_data()
 
     idt = user_data['idt']
     name = user_data['name']
     link_loc = user_data['link_loc']
-    bd.set_link_loc(idt, name, link_loc)
+    db.set_link_loc(idt, name, link_loc)
 
 def register_handlers_set_link_loc(dp: Dispatcher):
     dp.register_message_handler(set_link_loc_start, commands="set_link_loc", state="*")

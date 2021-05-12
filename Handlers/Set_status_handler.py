@@ -71,7 +71,7 @@ async def chosen_status(message: types.Message, state: FSMContext):
 
     await state.finish()
     
-async def update_in_bd(state: FSMContext):
+async def update_in_db(state: FSMContext):
     user_data = await state.get_data()
 
     idt = user_data['idt']

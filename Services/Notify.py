@@ -16,7 +16,7 @@ async def notify(bot: Bot):
     delay = 60 * 30
     while True:
         logger.info("notify")
-        names_to_check, idts, notified_eps, _ = bd.select_notified_ep('nb')
+        names_to_check, idts, notified_eps, _ = db.select_notified_ep('nb')
         
         dict_name_url = check_for_notification_nb(names_to_check, idts, notified_eps)
         
@@ -39,7 +39,7 @@ async def notify_sv(bot: Bot):
     while True:
         logger.info("notify sv")
 
-        names_to_check, idts_, notified_eps, dub_or_sub = bd.select_notified_ep("sv")        
+        names_to_check, idts_, notified_eps, dub_or_sub = db.select_notified_ep("sv")        
 
         dict_name_url = await check_for_notification_sv(names_to_check, idts_, notified_eps, dub_or_sub)
 

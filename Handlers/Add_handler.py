@@ -96,7 +96,7 @@ async def anime_episode_chosen(message: types.Message, state: FSMContext):
 
 
 
-async def insert_in_bd(db: DB, state: FSMContext):
+async def insert_in_db(db: DB, state: FSMContext):
     user_data = await state.get_data()
     idt = user_data['idt']
     name = user_data['chosen_name']
