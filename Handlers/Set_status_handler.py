@@ -5,7 +5,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD.BD import bd, available_status
+from DB.DB import db, available_status
 
 class Set_status_handler(StatesGroup):
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 available_status = available_status[:-1]
 
 async def set_time_start(message: types.Message):
-    response = bd.show(message.from_user.id, 'All')
+    response = db.show(message.from_user.id, 'All')
 
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for r in response:
@@ -65,7 +65,7 @@ async def chosen_status(message: types.Message, state: FSMContext):
     name = user_data['name']
 
 
-    await update_in_bd(state)
+    await update_in_db(state)
 
     await message.answer(f"Status `{status}` for anime `{name}` updated.", reply_markup=types.ReplyKeyboardRemove())
 
@@ -78,7 +78,7 @@ async def update_in_bd(state: FSMContext):
     name = user_data['name']
     status = user_data['status']
 
-    bd.set_status(idt, name, status)
+    db.set_status(idt, name, status)
 
 def register_handlers_set_status(dp: Dispatcher):
     dp.register_message_handler(set_time_start, commands="set_status", state="*")

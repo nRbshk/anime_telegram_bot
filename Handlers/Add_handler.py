@@ -4,7 +4,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD.BD import BD, bd, available_status, available_dub_sub
+from DB.DB import DB, db, available_status, available_dub_sub
 available_status = available_status[:-1]
 
 logger = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ async def anime_status_chosen(message: types.Message, state: FSMContext):
     else:
         await state.update_data(episode=0)
 
-        await insert_in_bd(bd, state)
+        await insert_in_db(db, state)
         
         user_data = await state.get_data()
         await message.answer(f"Anime `{user_data['chosen_name']}` with status `{user_data['status']}` added.", reply_markup=types.ReplyKeyboardRemove())
@@ -87,7 +87,7 @@ async def anime_episode_chosen(message: types.Message, state: FSMContext):
     await state.update_data(episode=message.text)
     
     user_data = await state.get_data()
-    await insert_in_bd(bd, state)
+    await insert_in_db(db, state)
     
     await message.answer(f"Anime `{user_data['chosen_name']}` with status `{user_data['status']}` added.", reply_markup=types.ReplyKeyboardRemove())
 
@@ -96,14 +96,14 @@ async def anime_episode_chosen(message: types.Message, state: FSMContext):
 
 
 
-async def insert_in_bd(bd: BD, state: FSMContext):
+async def insert_in_bd(db: DB, state: FSMContext):
     user_data = await state.get_data()
     idt = user_data['idt']
     name = user_data['chosen_name']
     status = user_data['status']
     ep = user_data['episode']
     ds = user_data['dub_or_sub']
-    if not bd.save_anime(idt, name, status, ep, ds):
+    if not db.save_anime(idt, name, status, ep, ds):
         logger.info(f"insert in BD with data name={name} status={status} episode={ep} dub_or_sub={ds}")
     else:
         logger.error(f'Error when insert in BD')

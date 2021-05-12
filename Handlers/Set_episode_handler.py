@@ -4,7 +4,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD.BD import bd
+from DB.DB import db
 
 class Set_episode_handler(StatesGroup):
 
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 async def set_episode_start(message: types.Message):
-    response = bd.show(message.from_user.id, 'inProgress')
+    response = db.show(message.from_user.id, 'inProgress')
 
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for r in response:
@@ -66,7 +66,7 @@ async def update_in_bd(state: FSMContext):
 
     logger.info(f"UPDATE in bd name={name} episode={episode}")
 
-    bd.set_episode(idt, name, episode)
+    db.set_episode(idt, name, episode)
 
 def register_handlers_set_episode(dp: Dispatcher):
     dp.register_message_handler(set_episode_start, commands="set_episode", state="*")

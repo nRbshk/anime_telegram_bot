@@ -2,7 +2,7 @@ import logging
 
 from asyncio import sleep
 
-from BD.BD import bd
+from DB.DB import db
 
 from Helpers.notify_sv import check_for_notification_sv
 from Helpers.notify_nb import check_for_notification_nb
@@ -27,7 +27,7 @@ async def notify(bot: Bot):
             
             await bot.send_message(idt, pre_text)
 
-            bd.update_notified_ep(idt, k, notified_ep_, 'nb')
+            db.update_notified_ep(idt, k, notified_ep_, 'nb')
 
 
         await sleep(delay)
@@ -50,6 +50,6 @@ async def notify_sv(bot: Bot):
 
             await bot.send_message(idt, pre_text)
 
-            bd.update_notified_ep(idt, k, notified_ep_, 'sv')
+            db.update_notified_ep(idt, k, notified_ep_, 'sv')
 
         await sleep(delay)

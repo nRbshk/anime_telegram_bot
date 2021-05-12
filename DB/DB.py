@@ -25,7 +25,7 @@ class DB_positions(Enum):
 available_status = ["done", "inProgress", "inList", "All"]
 available_link_locs = ["nb", "sv"]
 available_dub_sub = ['dub', 'sub']
-class BD:
+class DB:
     def save_anime(self, idt_, name_, status_, episode_ = 0, dub_or_sub_ = "sub", nb_or_sv="nb"):
         logger.info("START save_anime")
         conn = sqlite3.connect("db.db")
@@ -182,4 +182,4 @@ class BD:
         logger.info("END update_notified_ep")
         conn.close()
 
-bd = BD()
+db = DB()

@@ -4,7 +4,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD.BD import BD, bd, available_status, DB_positions
+from DB.DB import DB, db, available_status, DB_positions
 
 class Show_handler(StatesGroup):
 
@@ -32,7 +32,7 @@ async def chosen_status(message: types.Message, state: FSMContext):
         await message.answer("Use keyboard.")
 
     await state.update_data(status=message.text)
-    response = await select_from_bd(bd, state)
+    response = await select_from_bd(db, state)
 
 
     if response == []:
@@ -47,13 +47,13 @@ async def chosen_status(message: types.Message, state: FSMContext):
 
     await state.finish()
     
-async def select_from_bd(bd: BD, state: FSMContext):
+async def select_from_bd(db: DB, state: FSMContext):
     user_data = await state.get_data()
     idt = user_data['idt']
     status = user_data['status']
 
     logger.info(f"SELECT from bd status={status}")
-    return bd.show(idt, status)
+    return db.show(idt, status)
 
 
 

@@ -6,7 +6,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 
-from BD.BD import bd, available_dub_sub, DB_positions
+from DB.DB import db, available_dub_sub, DB_positions
 from Helpers.notify_sv import get_episodes_sv, get_id_sv
 
 
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 async def watch_start(message: types.Message):
     logger.info("START watch start")
-    response = bd.show(message.from_user.id, 'All')
+    response = db.show(message.from_user.id, 'All')
 
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for r in response:

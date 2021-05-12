@@ -6,7 +6,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD.BD import bd
+from DB.DB import db
 
 
 
@@ -26,10 +26,10 @@ async def secret_command_start(message: types.Message):
         nb_or_sv = text[4]
         status = "inProgress"
         prepared_text = f"Anime {name} with episode {episode} added."
-        send = bd.save_anime(idt, name, status, episode, dub_or_sub, nb_or_sv)
+        send = db.save_anime(idt, name, status, episode, dub_or_sub, nb_or_sv)
 
     elif cmd == '/secret_set_episode':
-        bd.set_episode(idt, name, episode)
+        db.set_episode(idt, name, episode)
         prepared_text = f"Episode {episode} for anime {name} setted."
         send = 0
     

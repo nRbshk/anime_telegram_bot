@@ -4,7 +4,7 @@ from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from BD.BD import bd
+from DB.DB import db
 
 class Set_time_handler(StatesGroup):
 
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 async def set_time_start(message: types.Message):
-    response = bd.show(message.from_user.id, 'inProgress')
+    response = db.show(message.from_user.id, 'inProgress')
 
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for r in response:
@@ -64,7 +64,7 @@ async def update_in_bd(state: FSMContext):
     name = user_data['name']
     time = user_data['time']
     time = time[0:2] + ":" + time[3:5]
-    bd.set_time(idt, name, time)
+    db.set_time(idt, name, time)
 
 def register_handlers_set_time(dp: Dispatcher):
     dp.register_message_handler(set_time_start, commands="set_time", state="*")
