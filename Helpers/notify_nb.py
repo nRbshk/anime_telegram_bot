@@ -28,7 +28,7 @@ def check_for_notification_nb(names_to_check: list, idt: list, notified_eps: lis
 
     if resp.status_code != OK_CODE:
         logger.error(f"Cant get {url}. Status is {resp.status_code}")
-        return 1
+        return None
     
     soup = BeautifulSoup(resp.text, 'lxml')
 
@@ -46,8 +46,9 @@ def find_entries(find_title_relative: list, find_cont_newscont: list, names: lis
 
     for index in range(len(find_title_relative)):
         title_name = soup.find('a', text=find_title_relative[index].text, href=True)
-        if findall("(манга)", title_name.text) \
-            or findall(".+ожидается", find_cont_newscont[index].text.lower()):
+        is_manga = findall("(манга)", title_name.text.lower())
+        is_not_ready = findall(".+ожидается", find_cont_newscont[index].text.lower())
+        if is_manga or is_not_ready:
             continue
         
         for jndex in range(len(names)):
@@ -55,12 +56,16 @@ def find_entries(find_title_relative: list, find_cont_newscont: list, names: lis
             if len(temp) == 0:
                 continue
             current_ep = int(temp[0]['title'].split(" ")[-2]) # getting episode
-            if findall(f'.*(\.\.\.).*', title_name.text):
+            is_triple_point_exists = findall(f'.*(\.\.\.).*', title_name.text.lower())
+            if is_triple_point_exists:
                 title_name_to_re = " ".join(title_name.text.split(" ")[0:-1]) # removing last word as its can end on "na..."
             else:
                 title_name_to_re = " ".join(title_name.text.split(" ")[0:-2]) # removing 2 episode
             
-            if findall(f'.*{title_name_to_re.lower()}.*', names[jndex].lower()) and current_ep > notified_eps[jndex]:
+            title_name_exists_in_names = findall(f'.*{title_name_to_re.lower()}.*', names[jndex].lower())
+            is_current_ep_greater_than_notified = current_ep > notified_eps[jndex]
+            
+            if title_name_exists_in_names or is_current_ep_greater_than_notified:
                 title_url_names[names[jndex]] = str(get_base_link("nb") + title_name['href'] + ',' + str(idt[jndex]) + ',' + str(current_ep))
 
                 names.remove(names[jndex])
